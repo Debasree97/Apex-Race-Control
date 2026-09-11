@@ -26,3 +26,22 @@ body {
   color: var(--color-text-primary);
   font-family: var(--font-sans);
 }
+
+.tyre-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  grid-template-areas:
+    "fl fr"
+    "car car"
+    "rl rr";
+}
+
+@media (min-width: 768px) {
+  .tyre-grid {
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-areas:
+      "fl car fr"
+      "rl car rr";
+  }
+}
