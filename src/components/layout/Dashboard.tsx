@@ -13,7 +13,7 @@ export function Dashboard() {
       <Header />
       <div className="flex flex-col md:flex-row">
         <Rail />
-        <main className="flex-1 grid grid-cols-1 gap-3 p-4 md:grid-cols-3">
+        <main className="dashboard-grid p-4">
           <RaceStatusPanel />
           <CarTyresPanel />
           <EventsPanel />

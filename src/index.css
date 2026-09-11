@@ -37,11 +37,32 @@ body {
     "rl rr";
 }
 
+.dashboard-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "race"
+    "events"
+    "tyres"
+    "cartel"
+    "driver"
+    "weather";
+}
+
 @media (min-width: 768px) {
   .tyre-grid {
     grid-template-columns: 1fr auto 1fr;
     grid-template-areas:
       "fl car fr"
       "rl car rr";
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+      "race race events"
+      "tyres tyres events"
+      "cartel driver weather";
   }
 }
