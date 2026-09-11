@@ -11,9 +11,9 @@ export function Dashboard() {
   return (
     <div className="min-h-screen bg-bg text-text-primary">
       <Header />
-      <div className="flex">
+      <div className="flex flex-col md:flex-row">
         <Rail />
-        <main className="flex-1 grid grid-cols-3 gap-3 p-4">
+        <main className="flex-1 grid grid-cols-1 gap-3 p-4 md:grid-cols-3">
           <RaceStatusPanel />
           <CarTyresPanel />
           <EventsPanel />
