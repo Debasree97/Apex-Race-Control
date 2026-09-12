@@ -72,10 +72,10 @@ export interface RaceSeed {
 }
 
 // simulator
-export type SimState = {
+export interface SimState {
   drivers: Record<string, DriverTelemetry>;
   weather: Weather;
-};
+}
 
 export type Listener = (state: SimState) => void;
 
@@ -86,3 +86,8 @@ export interface RaceContextValue {
   activeDriverId: string;
   setActiveDriverId: (id: string) => void;
 }
+
+// tyres
+export type TyreLabel = "fl" | "fr" | "rl" | "rr";
+
+export type TyreStatus = "cold" | "optimal" | "warning" | "critical";
