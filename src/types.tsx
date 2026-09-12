@@ -30,8 +30,8 @@ export interface DriverTelemetry {
     rl: BrakeCorner;
     rr: BrakeCorner;
   };
-  trackProgress?: number;
-  currentSpeedKmh?: number;
+  trackProgress: number;
+  currentSpeedKmh: number;
 }
 
 export interface Driver {

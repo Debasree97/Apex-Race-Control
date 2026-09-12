@@ -1,4 +1,5 @@
 import { useRace } from "../../context/RaceContext";
+import { TrackMap } from "./TrackMap";
 
 export function RaceStatusPanel() {
   const { seed, simState, activeDriverId } = useRace();
@@ -10,7 +11,7 @@ export function RaceStatusPanel() {
         01 / Race status
       </h2>
 
-      <div className="flex flex-col  lg:divide-x divide-border lg:flex-row justify-between items-center">
+      <div className="flex flex-col lg:divide-x divide-border lg:flex-row items-center lg:items-stretch">
         <div className="w-full lg:w-fit lg:pr-4 flex lg:flex-col justify-between items-center lg:items-start lg:justify-start">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between md:justify-start lg:gap-8">
             <span className="text-4xl font-bold text-accent font-mono">
@@ -61,11 +62,16 @@ export function RaceStatusPanel() {
           </div>
         </div>
 
-        <div className="mt-4 border border-border rounded-md h-40 flex flex-col items-center justify-center text-text-secondary text-xs uppercase tracking-widest">
-          <span>Track map</span>
-          <span className="text-text-primary normal-case mt-1">
-            {circuit.name}
-          </span>
+        <div className="w-full lg:w-auto lg:pl-4 mt-4 lg:mt-0 flex flex-col gap-2">
+          <div className="w-full max-w-55 flex items-center gap-1.5 text-xs text-text-secondary uppercase tracking-widest">
+            <span>🇩🇪</span>
+            <span className="text-text-primary normal-case">
+              {circuit.name}
+            </span>
+          </div>
+          <div className="w-full max-w-55 border border-border rounded-md p-2 aspect-square">
+            <TrackMap progress={baseline.trackProgress} />
+          </div>
         </div>
       </div>
     </section>
