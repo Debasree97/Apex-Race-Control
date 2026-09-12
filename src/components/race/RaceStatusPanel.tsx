@@ -1,13 +1,9 @@
-import type { Circuit, Driver } from "../../types";
+import { useRace } from "../../context/RaceContext";
 
-export function RaceStatusPanel({
-  driver,
-  circuit,
-}: {
-  driver: Driver;
-  circuit: Circuit;
-}) {
-  const { baseline } = driver;
+export function RaceStatusPanel() {
+  const { seed, simState, activeDriverId } = useRace();
+  const circuit = seed.circuit;
+  const baseline = simState.drivers[activeDriverId];
   return (
     <section className="bg-surface border border-border rounded-lg p-4 md:col-span-2">
       <h2 className="text-xs text-text-secondary uppercase tracking-widest mb-3">
@@ -52,7 +48,7 @@ export function RaceStatusPanel({
                 <p className=" text-sm">
                   <span className="lg:hidden mr-1">:</span>
                   <span className="text-text-primary">
-                    {baseline.topSpeedKmh} km/h
+                    {Math.round(baseline.topSpeedKmh)} km/h
                   </span>
                 </p>
               </div>

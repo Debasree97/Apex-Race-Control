@@ -1,3 +1,5 @@
+import { useRace } from "../../context/RaceContext";
+
 const severityColor: Record<string, string> = {
   info: "text-telemetry-cyan",
   tyre: "text-warning",
@@ -6,15 +8,16 @@ const severityColor: Record<string, string> = {
   critical: "text-critical",
 };
 
-export function EventsPanel({ sampleEvents }: { sampleEvents: string[] }) {
+export function EventsPanel() {
+  const { seed } = useRace();
+
   return (
-    <section className="bg-surface border border-border rounded-lg p-4 flex flex-col md:col-start-3 md:row-start-1 md:row-span-2">
+    <section className="bg-surface border border-border rounded-lg p-4 flex flex-col [grid-area:events]">
       <h2 className="text-xs text-text-secondary uppercase tracking-widest mb-3">
         08 / Live events
       </h2>
-
       <div className="flex flex-col gap-2 font-mono text-xs overflow-y-auto">
-        {sampleEvents.map((message, i) => (
+        {seed.sampleEvents.map((message, i) => (
           <div key={i} className="border border-border rounded-md p-2">
             <div className="flex justify-between text-text-secondary">
               <span className={severityColor.info}>SAMPLE</span>

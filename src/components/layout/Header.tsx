@@ -1,13 +1,11 @@
-import type { Circuit, Driver } from "../../types";
+import { useRace } from "../../context/RaceContext";
 
-export function Header({
-  driver,
-  circuit,
-}: {
-  driver: Driver;
-  circuit: Circuit;
-}) {
-  const { baseline } = driver;
+export function Header() {
+  const { seed, simState, activeDriverId } = useRace();
+  const driver = seed.drivers.find((d) => d.id === activeDriverId)!;
+  const baseline = simState.drivers[activeDriverId];
+  const circuit = seed.circuit;
+
   return (
     <header className="border-b border-border bg-surface px-4 py-3 md:px-6 md:py-3 flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-0">
       <div className="flex items-center justify-between md:contents">
@@ -19,7 +17,6 @@ export function Header({
             RACE CONTROL
           </p>
         </div>
-
         <span className="flex items-center gap-1 text-success text-xs font-mono md:order-2 md:text-sm">
           <span className="hidden md:inline">
             RACE {baseline.lap}/{circuit.totalLaps}
@@ -30,7 +27,7 @@ export function Header({
       </div>
 
       <div className="flex items-center justify-between md:order-3 md:justify-end md:gap-4 text-xs md:text-sm font-mono text-text-secondary md:text-text-primary">
-        <span>{driver.name}</span>
+        <span>{driver.shortName}</span>
         <span>
           P{baseline.position}&nbsp;&nbsp;{baseline.lap}/{circuit.totalLaps}
         </span>

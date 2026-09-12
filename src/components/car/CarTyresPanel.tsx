@@ -1,10 +1,9 @@
-import type { Driver } from "../../types";
+import { useRace } from "../../context/RaceContext";
 
-export function CarTyresPanel({
-  tyres,
-}: {
-  tyres: Driver["baseline"]["tyres"];
-}) {
+export function CarTyresPanel() {
+  const { simState, activeDriverId } = useRace();
+  const tyres = simState.drivers[activeDriverId].tyres;
+
   return (
     <section className="bg-surface border border-border rounded-lg p-4 md:col-span-2">
       <h2 className="text-xs text-text-secondary uppercase tracking-widest mb-3">
@@ -15,13 +14,15 @@ export function CarTyresPanel({
         <div className="[grid-area:fl] border border-border rounded-md p-2 font-mono text-xs">
           <p className="text-text-secondary">FL</p>
           <p className="text-text-primary">
-            {tyres.fl.tempC}°C · {tyres.fl.pressureBar} bar
+            {tyres.fl.tempC.toFixed(1)}°C · {tyres.fl.pressureBar.toFixed(2)}{" "}
+            bar
           </p>
         </div>
         <div className="[grid-area:fr] border border-border rounded-md p-2 font-mono text-xs">
           <p className="text-text-secondary">FR</p>
           <p className="text-text-primary">
-            {tyres.fr.tempC}°C · {tyres.fr.pressureBar} bar
+            {tyres.fr.tempC.toFixed(1)}°C · {tyres.fr.pressureBar.toFixed(2)}{" "}
+            bar
           </p>
         </div>
         <div className="[grid-area:car] border border-border rounded-md h-40 md:h-56 flex items-center justify-center text-text-secondary text-xs uppercase tracking-widest">
@@ -30,13 +31,15 @@ export function CarTyresPanel({
         <div className="[grid-area:rl] border border-border rounded-md p-2 font-mono text-xs">
           <p className="text-text-secondary">RL</p>
           <p className="text-text-primary">
-            {tyres.rl.tempC}°C · {tyres.rl.pressureBar} bar
+            {tyres.rl.tempC.toFixed(1)}°C · {tyres.rl.pressureBar.toFixed(2)}{" "}
+            bar
           </p>
         </div>
         <div className="[grid-area:rr] border border-border rounded-md p-2 font-mono text-xs">
           <p className="text-text-secondary">RR</p>
           <p className="text-text-primary">
-            {tyres.rr.tempC}°C · {tyres.rr.pressureBar} bar
+            {tyres.rr.tempC.toFixed(1)}°C · {tyres.rr.pressureBar.toFixed(2)}{" "}
+            bar
           </p>
         </div>
       </div>

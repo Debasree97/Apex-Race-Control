@@ -30,6 +30,8 @@ export interface DriverTelemetry {
     rl: BrakeCorner;
     rr: BrakeCorner;
   };
+  trackProgress?: number;
+  currentSpeedKmh?: number;
 }
 
 export interface Driver {
@@ -67,4 +69,20 @@ export interface RaceSeed {
   drivers: Driver[];
   weatherBaseline: Weather;
   sampleEvents: string[];
+}
+
+// simulator
+export type SimState = {
+  drivers: Record<string, DriverTelemetry>;
+  weather: Weather;
+};
+
+export type Listener = (state: SimState) => void;
+
+// context
+export interface RaceContextValue {
+  seed: RaceSeed;
+  simState: SimState;
+  activeDriverId: string;
+  setActiveDriverId: (id: string) => void;
 }
