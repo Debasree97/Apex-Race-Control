@@ -1,4 +1,13 @@
-export function CarTelemetryPanel() {
+import type { DriverTelemetry } from "../../types";
+
+export function CarTelemetryPanel({
+  telemetry,
+}: {
+  telemetry: Pick<DriverTelemetry, "rpm" | "engineTempC" | "fuelPercent">;
+}) {
+  const { rpm, engineTempC, fuelPercent } = telemetry;
+  const rpmPercent = Math.min((rpm / 12000) * 100, 100); // 12,000 as an assumed redline for the bar fill
+  const engineTempCPercent = Math.min((engineTempC / 140) * 100, 100); // 140 as an assumed maximum for the bar fill
   return (
     <section className="bg-surface border border-border rounded-lg p-4">
       <h2 className="text-xs text-text-secondary uppercase tracking-widest mb-3">
@@ -9,12 +18,12 @@ export function CarTelemetryPanel() {
         <div>
           <div className="flex justify-between font-mono text-xs">
             <span className="text-text-secondary">RPM</span>
-            <span className="text-text-primary">8,420</span>
+            <span className="text-text-primary">{rpm.toLocaleString()}</span>
           </div>
           <div className="mt-1 h-1.5 bg-border rounded-full overflow-hidden">
             <div
               className="h-full bg-telemetry-cyan"
-              style={{ width: "70%" }}
+              style={{ width: `${rpmPercent}%` }}
             />
           </div>
         </div>
@@ -22,20 +31,28 @@ export function CarTelemetryPanel() {
         <div>
           <div className="flex justify-between font-mono text-xs">
             <span className="text-text-secondary">ENGINE TEMP</span>
-            <span className="text-text-primary">108°C</span>
+            <span className="text-text-primary">{engineTempC}°C</span>
           </div>
           <div className="mt-1 h-1.5 bg-border rounded-full overflow-hidden">
-            <div className="h-full bg-warning" style={{ width: "60%" }} />
+            <div
+              className="h-full bg-warning"
+              style={{
+                width: `${engineTempCPercent}%`,
+              }}
+            />
           </div>
         </div>
 
         <div>
           <div className="flex justify-between font-mono text-xs">
             <span className="text-text-secondary">FUEL</span>
-            <span className="text-text-primary">64%</span>
+            <span className="text-text-primary">{fuelPercent}%</span>
           </div>
           <div className="mt-1 h-1.5 bg-border rounded-full overflow-hidden">
-            <div className="h-full bg-success" style={{ width: "64%" }} />
+            <div
+              className="h-full bg-success"
+              style={{ width: `${fuelPercent}%` }}
+            />
           </div>
         </div>
 
