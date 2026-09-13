@@ -1,7 +1,7 @@
 import { useRace } from "../../context/RaceContext";
 
 export function Rail() {
-  const { seed, simState, activeDriverId } = useRace();
+  const { seed, simState, activeDriverId, setActiveDriverId } = useRace();
 
   return (
     <aside className="flex flex-row gap-2 overflow-x-auto border-b border-border bg-surface p-3 md:w-48 md:flex-col md:overflow-visible md:border-b-0 md:border-r md:p-4">
@@ -13,16 +13,18 @@ export function Rail() {
         const isActive = driver.id === activeDriverId;
         const live = simState.drivers[driver.id];
         return (
-          <div
+          <button
             key={driver.id}
-            className={`flex-shrink-0 whitespace-nowrap md:whitespace-normal text-sm font-mono px-2 py-1 rounded-md border ${
+            onClick={() => setActiveDriverId(driver.id)}
+            aria-pressed={isActive}
+            className={`shrink-0 whitespace-nowrap md:whitespace-normal text-left text-sm font-mono px-2 py-1 rounded-md border outline-none transition-colors ${
               isActive
                 ? "border-accent text-accent"
-                : "border-transparent text-text-secondary"
+                : "border-transparent text-text-secondary hover:border-border hover:text-text-primary focus-visible:border-telemetry-cyan"
             }`}
           >
             {driver.shortName} <span className="text-xs">P{live.position}</span>
-          </div>
+          </button>
         );
       })}
     </aside>

@@ -85,6 +85,7 @@ export interface RaceContextValue {
   simState: SimState;
   activeDriverId: string;
   setActiveDriverId: (id: string) => void;
+  events: RaceEvent[];
 }
 
 // tyres
@@ -99,3 +100,21 @@ export interface SparklineProps {
   max: number;
   colorClass: string;
 }
+
+//event
+export type EventSeverity =
+  | "info"
+  | "tyre"
+  | "weather"
+  | "caution"
+  | "critical";
+
+export interface RaceEvent {
+  id: string;
+  timestamp: string;
+  severity: EventSeverity;
+  message: string;
+}
+
+// icon
+export type IconProps = { className?: string };
