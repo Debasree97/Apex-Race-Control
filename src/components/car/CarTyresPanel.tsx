@@ -109,25 +109,25 @@ export function CarTyresPanel() {
                     <span className="text-text-primary uppercase tracking-widest">
                       {tyreLabels[selected]} TYRE
                     </span>
-                    <span className={`${tyreStatusText[status]} lg:text-2xl`}>
+                    <span className={`${tyreStatusText[status]} lg:text-lg`}>
                       {tyreStatusLabel[status]}
                     </span>
                   </div>
                   <div className="flex lg:flex-col items-center justify-between">
                     <span className="text-text-secondary">TEMP</span>
-                    <span className={`${tyreStatusText[status]}  lg:text-2xl`}>
+                    <span className={`${tyreStatusText[status]}  lg:text-lg`}>
                       {tyres[selected].tempC.toFixed(1)}°C{" "}
                     </span>
                   </div>
                   <div className="flex lg:flex-col items-center justify-between mt-1">
                     <span className="text-text-secondary">PRESS</span>
-                    <span className="text-text-primary  lg:text-2xl">
+                    <span className="text-text-primary  lg:text-lg">
                       {tyres[selected].pressureBar.toFixed(2)} bar
                     </span>
                   </div>
                   <div className="flex lg:flex-col items-center justify-between mt-1">
                     <span className="text-text-secondary">BRAKE</span>
-                    <span className="text-text-primary  lg:text-2xl">
+                    <span className="text-text-primary  lg:text-lg">
                       {brakes[selected].tempC.toFixed(0)}°C
                     </span>
                   </div>

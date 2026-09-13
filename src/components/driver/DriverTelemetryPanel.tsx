@@ -1,9 +1,15 @@
 import { useRace } from "../../context/RaceContext";
+import { useRollingHistory } from "../../hooks/useRollingHistory";
+import { Sparkline } from "./Sparkline";
 
 export function DriverTelemetryPanel() {
   const { simState, activeDriverId } = useRace();
   const { heartRateBpm, breathsPerMin, stress } =
     simState.drivers[activeDriverId];
+
+  const heartRateHistory = useRollingHistory(heartRateBpm);
+  const breathsHistory = useRollingHistory(breathsPerMin);
+  const stressHistory = useRollingHistory(stress);
 
   return (
     <section className="bg-surface border border-border rounded-lg p-4 [grid-area:driver]">
@@ -18,8 +24,13 @@ export function DriverTelemetryPanel() {
             {Math.round(heartRateBpm)}{" "}
             <span className="text-xs text-text-secondary">BPM</span>
           </p>
-          <div className="mt-2 h-10 border border-border rounded flex items-center justify-center text-text-secondary text-[10px] uppercase tracking-widest">
-            chart
+          <div className="mt-2 border border-border rounded-sm">
+            <Sparkline
+              data={heartRateHistory}
+              min={45}
+              max={160}
+              colorClass="stroke-success"
+            />
           </div>
         </div>
 
@@ -29,8 +40,13 @@ export function DriverTelemetryPanel() {
             {Math.round(breathsPerMin)}{" "}
             <span className="text-xs text-text-secondary">/min</span>
           </p>
-          <div className="mt-2 h-10 border border-border rounded flex items-center justify-center text-text-secondary text-[10px] uppercase tracking-widest">
-            chart
+          <div className="mt-2 border border-border rounded-sm">
+            <Sparkline
+              data={breathsHistory}
+              min={8}
+              max={25}
+              colorClass="stroke-telemetry-cyan"
+            />
           </div>
         </div>
 
@@ -39,8 +55,13 @@ export function DriverTelemetryPanel() {
           <p className="text-stress-purple text-2xl font-mono">
             {Math.round(stress)}
           </p>
-          <div className="mt-2 h-10 border border-border rounded flex items-center justify-center text-text-secondary text-[10px] uppercase tracking-widest">
-            chart
+          <div className="mt-2 border border-border rounded-sm">
+            <Sparkline
+              data={stressHistory}
+              min={0}
+              max={100}
+              colorClass="stroke-stress-purple"
+            />
           </div>
         </div>
       </div>

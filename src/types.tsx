@@ -91,3 +91,11 @@ export interface RaceContextValue {
 export type TyreLabel = "fl" | "fr" | "rl" | "rr";
 
 export type TyreStatus = "cold" | "optimal" | "warning" | "critical";
+
+//driver
+export interface SparklineProps {
+  data: number[];
+  min: number;
+  max: number;
+  colorClass: string;
+}
