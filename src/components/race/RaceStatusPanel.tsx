@@ -3,6 +3,7 @@ import {
   formatMsAsLapTime,
   parseLapTimeToSeconds,
 } from "../../utils/formatter";
+import { CollapsiblePanel } from "../layout/CollapsiblePanel";
 import { TrackMap } from "./TrackMap";
 
 export function RaceStatusPanel() {
@@ -22,11 +23,7 @@ export function RaceStatusPanel() {
         lapTimeSeconds
       : 0;
   return (
-    <section className="bg-surface border border-border rounded-lg p-4 md:col-span-2">
-      <h2 className="text-xs text-text-secondary uppercase tracking-widest mb-3">
-        01 / Race status
-      </h2>
-
+    <CollapsiblePanel title="01 / Race status" gridArea="race">
       <div className="flex flex-col lg:divide-x divide-border lg:flex-row items-center lg:items-stretch">
         <div className="w-full lg:w-fit lg:pr-4 flex lg:flex-col justify-between items-center lg:items-start lg:justify-start">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between md:justify-start lg:gap-8">
@@ -95,6 +92,6 @@ export function RaceStatusPanel() {
           </div>
         </div>
       </div>
-    </section>
+    </CollapsiblePanel>
   );
 }

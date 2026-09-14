@@ -64,32 +64,35 @@ body {
     "car car"
     "rl rr";
 }
-
-.left-stack {
-  grid-area: race-start / race-start / tyres-end / tyres-end;
-}
+/* .tyre-grid {
+    flex-basis: 1;
+  } */
 
 .dashboard-grid {
   display: grid;
   gap: 0.75rem;
   grid-template-columns: 1fr;
   grid-template-areas:
-    "leftstack"
-    "events"
-    "cartel"
+    "race"
+    "tyres"
     "driver"
-    "weather";
+    "cartel"
+    "weather"
+    "events";
 }
 
 @media (min-width: 768px) {
-  .tyre-grid {
-    flex-basis: 1;
-  }
   .dashboard-grid {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-areas:
-      "leftstack leftstack events"
-      "tyres tyres events"
-      "cartel driver weather";
+      "race tyres driver"
+      "cartel weather events";
+  }
+}
+
+@media (min-width: 1280px) {
+  .dashboard-grid {
+    height: 100%;
+    grid-template-rows: 1fr 1fr;
   }
 }

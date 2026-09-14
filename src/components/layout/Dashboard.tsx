@@ -6,38 +6,19 @@ import { RaceStatusPanel } from "../race/RaceStatusPanel";
 import { WeatherPanel } from "../weather/WeatherPanel";
 import { Header } from "./Header";
 import { Rail } from "./Rail";
-import { useEffect, useState } from "react";
-
 export function Dashboard() {
-  const [leftColumnEl, setLeftColumnEl] = useState<HTMLDivElement | null>(null);
-  const [leftColumnHeight, setLeftColumnHeight] = useState<number | undefined>(
-    undefined,
-  );
-
-  useEffect(() => {
-    if (!leftColumnEl) return;
-
-    const observer = new ResizeObserver((entries) => {
-      setLeftColumnHeight(entries[0].contentRect.height);
-    });
-    observer.observe(leftColumnEl);
-    return () => observer.disconnect();
-  }, [leftColumnEl]);
-
   return (
-    <div className="min-h-screen bg-bg text-text-primary">
+    <div className="h-screen flex flex-col bg-bg text-text-primary overflow-hidden">
       <Header />
-      <div className="flex flex-col md:flex-row">
+      <div className="flex flex-col md:flex-row flex-1 min-h-0">
         <Rail />
-        <main className="dashboard-grid flex-1 min-w-0 p-4">
-          <div
-            ref={setLeftColumnEl}
-            className="[grid-area:leftstack] flex flex-col gap-3"
-          >
-            <RaceStatusPanel />
-            <CarTyresPanel />
-          </div>
-          <EventsPanel maxHeight={leftColumnHeight} />
+        <main
+          id="dashboard-scroll-area"
+          className="dashboard-grid flex-1 min-w-0 min-h-0 p-4 overflow-y-auto"
+        >
+          <RaceStatusPanel />
+          <CarTyresPanel />
+          <EventsPanel />
           <CarTelemetryPanel />
           <DriverTelemetryPanel />
           <WeatherPanel />

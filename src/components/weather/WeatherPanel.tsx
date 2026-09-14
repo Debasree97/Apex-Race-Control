@@ -4,6 +4,7 @@ import { HumidityIcon } from "../../icons/HumidityIcon";
 import { PressureIcon } from "../../icons/PressureIcon";
 import { TemperatureIcon } from "../../icons/TempatureIcon";
 import { WindIcon } from "../../icons/WIndIcon";
+import { CollapsiblePanel } from "../layout/CollapsiblePanel";
 
 export function WeatherPanel() {
   const { simState } = useRace();
@@ -16,11 +17,7 @@ export function WeatherPanel() {
   } = simState.weather;
 
   return (
-    <section className="bg-surface border border-border rounded-lg p-4 [grid-area:weather]">
-      <h2 className="text-xs text-text-secondary uppercase tracking-widest mb-3">
-        07 / Weather
-      </h2>
-
+    <CollapsiblePanel title=" 05 / Weather" gridArea="weather">
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-5 font-mono text-xs text-text-secondary">
         <div className="flex flex-col items-center">
           <div className="flex flex-col items-center gap-1 mb-1">
@@ -68,6 +65,6 @@ export function WeatherPanel() {
           </p>
         </div>
       </div>
-    </section>
+    </CollapsiblePanel>
   );
 }

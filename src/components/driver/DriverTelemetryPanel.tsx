@@ -1,5 +1,7 @@
 import { useRace } from "../../context/RaceContext";
 import { useRollingHistory } from "../../hooks/useRollingHistory";
+import { CollapsiblePanel } from "../layout/CollapsiblePanel";
+import { CircularGauge } from "./CircularGauge";
 import { Sparkline } from "./Sparkline";
 
 export function DriverTelemetryPanel() {
@@ -12,59 +14,95 @@ export function DriverTelemetryPanel() {
   const stressHistory = useRollingHistory(stress);
 
   return (
-    <section className="bg-surface border border-border rounded-lg p-4 [grid-area:driver]">
-      <h2 className="text-xs text-text-secondary uppercase tracking-widest mb-3">
-        03 / Driver
-      </h2>
-
-      <div className="flex flex-col gap-3 md:grid md:grid-cols-3">
-        <div className="border border-border rounded-md p-3">
-          <p className="text-text-secondary text-xs font-mono">HEART RATE</p>
-          <p className="text-success text-2xl font-mono">
-            {Math.round(heartRateBpm)}{" "}
-            <span className="text-xs text-text-secondary">BPM</span>
-          </p>
-          <div className="mt-2 border border-border rounded-sm">
+    <CollapsiblePanel title="03 / Driver state" gridArea="driver">
+      <div className="flex flex-col gap-3 flex-1 justify-around">
+        <div className="flex items-center gap-3">
+          <div className="relative shrink-0">
+            <CircularGauge
+              value={heartRateBpm}
+              min={45}
+              max={160}
+              colorClass="text-success"
+            />
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="font-mono text-sm text-text-primary leading-none">
+                {Math.round(heartRateBpm)}
+              </span>
+              <span className="text-[8px] text-text-secondary leading-none mt-0.5">
+                BPM
+              </span>
+            </div>
+          </div>
+          <div className="flex-1 min-w-0 ">
+            <p className="text-text-secondary text-xs mb-1">Heart Rate</p>
             <Sparkline
               data={heartRateHistory}
               min={45}
               max={160}
               colorClass="stroke-success"
+              fillClass="fill-success"
             />
           </div>
         </div>
 
-        <div className="border border-border rounded-md p-3">
-          <p className="text-text-secondary text-xs font-mono">BREATHING</p>
-          <p className="text-telemetry-cyan text-2xl font-mono">
-            {Math.round(breathsPerMin)}{" "}
-            <span className="text-xs text-text-secondary">/min</span>
-          </p>
-          <div className="mt-2 border border-border rounded-sm">
+        <div className="flex items-center gap-3">
+          <div className="relative shrink-0">
+            <CircularGauge
+              value={breathsPerMin}
+              min={8}
+              max={25}
+              colorClass="text-telemetry-cyan"
+            />
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="font-mono text-sm text-text-primary leading-none">
+                {Math.round(breathsPerMin)}
+              </span>
+              <span className="text-[8px] text-text-secondary leading-none mt-0.5">
+                /min
+              </span>
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-text-secondary text-xs mb-1">Breathing Rate</p>
             <Sparkline
               data={breathsHistory}
               min={8}
               max={25}
               colorClass="stroke-telemetry-cyan"
+              fillClass="fill-telemetry-cyan"
             />
           </div>
         </div>
 
-        <div className="border border-border rounded-md p-3">
-          <p className="text-text-secondary text-xs font-mono">STRESS</p>
-          <p className="text-stress-purple text-2xl font-mono">
-            {Math.round(stress)}
-          </p>
-          <div className="mt-2 border border-border rounded-sm">
+        <div className="flex items-center gap-3">
+          <div className="relative shrink-0">
+            <CircularGauge
+              value={stress}
+              min={0}
+              max={100}
+              colorClass="text-stress-purple"
+            />
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="font-mono text-sm text-text-primary leading-none">
+                {Math.round(stress)}
+              </span>
+              <span className="text-[8px] text-text-secondary leading-none mt-0.5">
+                STRESS
+              </span>
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-text-secondary text-xs mb-1">Stress Level</p>
             <Sparkline
               data={stressHistory}
               min={0}
               max={100}
               colorClass="stroke-stress-purple"
+              fillClass="fill-stress-purple"
             />
           </div>
         </div>
       </div>
-    </section>
+    </CollapsiblePanel>
   );
 }

@@ -1,4 +1,5 @@
 import { useRace } from "../../context/RaceContext";
+import { CollapsiblePanel } from "../layout/CollapsiblePanel";
 
 export function CarTelemetryPanel() {
   const { simState, activeDriverId } = useRace();
@@ -7,11 +8,7 @@ export function CarTelemetryPanel() {
   const rpmPercent = Math.min((rpm / 12000) * 100, 100);
 
   return (
-    <section className="bg-surface border border-border rounded-lg p-4 [grid-area:cartel]">
-      <h2 className="text-xs text-text-secondary uppercase tracking-widest mb-3">
-        04 / Car telemetry
-      </h2>
-
+    <CollapsiblePanel title="04 / Car telemetry" gridArea="cartel">
       <div className="flex flex-col gap-3">
         <div>
           <div className="flex justify-between font-mono text-xs">
@@ -66,6 +63,6 @@ export function CarTelemetryPanel() {
           </div>
         </div>
       </div>
-    </section>
+    </CollapsiblePanel>
   );
 }

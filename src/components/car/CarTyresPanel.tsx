@@ -11,6 +11,7 @@ import {
   tyreStatusLabel,
   tyreStatusText,
 } from "../../utils/tyreStatus";
+import { CollapsiblePanel } from "../layout/CollapsiblePanel";
 
 export function CarTyresPanel() {
   const { simState, activeDriverId } = useRace();
@@ -23,11 +24,7 @@ export function CarTyresPanel() {
   }
 
   return (
-    <section className="bg-surface border border-border rounded-lg p-4 [grid-area:tyres]">
-      <h2 className="text-xs text-text-secondary uppercase tracking-widest mb-3">
-        02 / Car & tyres
-      </h2>
-
+    <CollapsiblePanel title="02 / Car & tyres" gridArea="car">
       <div className="flex flex-col lg:flex-row  ">
         <div className="tyre-grid border-b lg:border-b-0 lg:border-r border-border pb-4 md:pb-0 ">
           {(["fl", "fr"] as const).map((corner) => {
@@ -141,6 +138,6 @@ export function CarTyresPanel() {
           )}
         </div>
       </div>
-    </section>
+    </CollapsiblePanel>
   );
 }

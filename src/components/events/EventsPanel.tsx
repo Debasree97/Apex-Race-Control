@@ -1,4 +1,5 @@
 import { useRace } from "../../context/RaceContext";
+import { CollapsiblePanel } from "../layout/CollapsiblePanel";
 
 const severityColor: Record<string, string> = {
   info: "text-telemetry-cyan",
@@ -8,21 +9,11 @@ const severityColor: Record<string, string> = {
   critical: "text-critical",
 };
 
-export function EventsPanel({ maxHeight }: { maxHeight?: number }) {
+export function EventsPanel() {
   const { events } = useRace();
 
   return (
-    <section
-      className="bg-surface border border-border rounded-lg p-4 flex flex-col max-h-80 md:max-h-(--left-col-height) [grid-area:events]"
-      style={
-        maxHeight
-          ? ({ "--left-col-height": `${maxHeight}px` } as React.CSSProperties)
-          : undefined
-      }
-    >
-      <h2 className="text-xs text-text-secondary uppercase tracking-widest mb-3 shrink-0">
-        08 / Live events
-      </h2>
+    <CollapsiblePanel title="06 / Live events" gridArea="events">
       <div className="event-scroll flex flex-col gap-2 font-mono text-xs overflow-y-auto min-h-0 flex-1">
         {events.length === 0 && (
           <p className="text-text-secondary">Monitoring for events…</p>
@@ -42,6 +33,6 @@ export function EventsPanel({ maxHeight }: { maxHeight?: number }) {
           </div>
         ))}
       </div>
-    </section>
+    </CollapsiblePanel>
   );
 }

@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export interface TyreCorner {
   tempC: number;
   pressureBar: number;
@@ -101,6 +103,15 @@ export interface SparklineProps {
   min: number;
   max: number;
   colorClass: string;
+  fillClass: string;
+}
+
+export interface CircularGaugeProps {
+  value: number;
+  min: number;
+  max: number;
+  colorClass: string; // e.g. 'stroke-success'
+  size?: number;
 }
 
 //event
@@ -125,4 +136,12 @@ export interface IconProps {
 export interface DriverNumberBadgeProps {
   number: number;
   className?: string;
+}
+
+//
+export interface CollapsiblePanelProps {
+  title: string;
+  children: ReactNode;
+  gridArea: string;
+  defaultOpen?: boolean;
 }
