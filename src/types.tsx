@@ -18,6 +18,7 @@ export interface DriverTelemetry {
   rpm: number;
   engineTempC: number;
   fuelPercent: number;
+  ersPercent: number;
   tyres: {
     fl: TyreCorner;
     fr: TyreCorner;
@@ -32,6 +33,7 @@ export interface DriverTelemetry {
   };
   trackProgress: number;
   currentSpeedKmh: number;
+  currentLapMs: number;
 }
 
 export interface Driver {
@@ -117,4 +119,10 @@ export interface RaceEvent {
 }
 
 // icon
-export type IconProps = { className?: string };
+export interface IconProps {
+  className?: string;
+}
+export interface DriverNumberBadgeProps {
+  number: number;
+  className?: string;
+}

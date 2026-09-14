@@ -29,7 +29,7 @@ export function Dashboard() {
       <Header />
       <div className="flex flex-col md:flex-row">
         <Rail />
-        <main className="dashboard-grid p-4">
+        <main className="dashboard-grid flex-1 min-w-0 p-4">
           <div
             ref={setLeftColumnEl}
             className="[grid-area:leftstack] flex flex-col gap-3"

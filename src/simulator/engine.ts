@@ -34,7 +34,13 @@ export function createRaceSimulator(
     drivers: Object.fromEntries(
       drivers.map((d) => [
         d.id,
-        { ...d.baseline, trackProgress: 0, currentSpeedKmh: 200 },
+        {
+          ...d.baseline,
+          trackProgress: 0,
+          currentSpeedKmh: 200,
+          currentLapMs: 0,
+          ersPercent: 65,
+        },
       ]),
     ),
     weather: { ...weatherBaseline },
@@ -52,8 +58,19 @@ export function createRaceSimulator(
 
   function tick() {
     for (const id in state.drivers) {
-      // Driver Telemetry
       const d = state.drivers[id];
+
+      // Lap
+      d.currentLapMs += 1000;
+
+      if (d.trackProgress >= 1000) {
+        d.trackProgress -= 1000;
+        d.lap += 1;
+        d.currentLapMs = 0;
+      }
+
+      // Driver Telemetry
+
       d.heartRateBpm = evolve(d.heartRateBpm, 65, {
         pullStrength: 0.05,
         noiseAmount: 2,
@@ -88,6 +105,15 @@ export function createRaceSimulator(
         spikeSize: 1500,
         min: 4000,
         max: 12500,
+      });
+
+      d.ersPercent = evolve(d.ersPercent, 60, {
+        pullStrength: 0.03,
+        noiseAmount: 3,
+        spikeChance: 0.06,
+        spikeSize: -15,
+        min: 0,
+        max: 100,
       });
 
       d.engineTempC = evolve(d.engineTempC, 112, {

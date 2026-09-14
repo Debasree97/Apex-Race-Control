@@ -1,4 +1,5 @@
 import { useRace } from "../../context/RaceContext";
+import { DriverNumberBadge } from "../../icons/DriverNumberBadge";
 
 export function Rail() {
   const { seed, simState, activeDriverId, setActiveDriverId } = useRace();
@@ -17,12 +18,16 @@ export function Rail() {
             key={driver.id}
             onClick={() => setActiveDriverId(driver.id)}
             aria-pressed={isActive}
-            className={`shrink-0 whitespace-nowrap md:whitespace-normal text-left text-sm font-mono px-2 py-1 rounded-md border outline-none transition-colors ${
+            className={`shrink-0 flex items-center gap-2 whitespace-nowrap  md:whitespace-normal text-left text-sm font-mono px-2 py-1 rounded-md border outline-none transition-colors ${
               isActive
                 ? "border-accent text-accent"
                 : "border-transparent text-text-secondary hover:border-border hover:text-text-primary focus-visible:border-telemetry-cyan"
             }`}
           >
+            <DriverNumberBadge
+              number={driver.number}
+              className="w-6 h-6 text-xs shrink-0"
+            />
             {driver.shortName} <span className="text-xs">P{live.position}</span>
           </button>
         );

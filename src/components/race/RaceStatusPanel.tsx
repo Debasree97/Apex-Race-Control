@@ -1,10 +1,26 @@
 import { useRace } from "../../context/RaceContext";
+import {
+  formatMsAsLapTime,
+  parseLapTimeToSeconds,
+} from "../../utils/formatter";
 import { TrackMap } from "./TrackMap";
 
 export function RaceStatusPanel() {
   const { seed, simState, activeDriverId } = useRace();
   const circuit = seed.circuit;
   const baseline = simState.drivers[activeDriverId];
+
+  const leader = Object.values(simState.drivers).find((d) => d.position === 1);
+  const isLeader = baseline.position === 1;
+  const lapTimeSeconds = parseLapTimeToSeconds(baseline.bestLap);
+  const gapSeconds =
+    leader && !isLeader
+      ? ((leader.lap * 1000 +
+          leader.trackProgress -
+          (baseline.lap * 1000 + baseline.trackProgress)) /
+          1000) *
+        lapTimeSeconds
+      : 0;
   return (
     <section className="bg-surface border border-border rounded-lg p-4 md:col-span-2">
       <h2 className="text-xs text-text-secondary uppercase tracking-widest mb-3">
@@ -34,7 +50,9 @@ export function RaceStatusPanel() {
                 <p>CURRENT LAP</p>
                 <p className=" text-sm ">
                   <span className="lg:hidden mr-1">:</span>
-                  <span className="text-text-primary">-</span>
+                  <span className="text-text-primary">
+                    {formatMsAsLapTime(baseline.currentLapMs)}
+                  </span>
                 </p>
               </div>
               <div className="flex justify-between lg:flex-col lg:px-4 text-right lg:text-left">
@@ -56,7 +74,10 @@ export function RaceStatusPanel() {
             </div>
 
             <div className="hidden pt-2 lg:flex flex-col font-mono">
-              <span className="text-2xl text-accent ">-</span>
+              <span className="text-2xl text-accent ">
+                {" "}
+                {isLeader ? "LEADER" : `+${gapSeconds.toFixed(3)}`}
+              </span>
               <span className="text-xs text-text-secondary">Gap to Leader</span>
             </div>
           </div>
