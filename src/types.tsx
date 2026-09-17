@@ -20,7 +20,7 @@ export interface DriverTelemetry {
   rpm: number;
   engineTempC: number;
   fuelPercent: number;
-  ersPercent: number;
+  ersPercent?: number;
   tyres: {
     fl: TyreCorner;
     fr: TyreCorner;
@@ -33,9 +33,9 @@ export interface DriverTelemetry {
     rl: BrakeCorner;
     rr: BrakeCorner;
   };
-  trackProgress: number;
-  currentSpeedKmh: number;
-  currentLapMs: number;
+  trackProgress?: number;
+  currentSpeedKmh?: number;
+  currentLapMs?: number;
 }
 
 export interface Driver {

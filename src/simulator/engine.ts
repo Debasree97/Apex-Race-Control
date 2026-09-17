@@ -60,6 +60,9 @@ export function createRaceSimulator(
     for (const id in state.drivers) {
       const d = state.drivers[id];
 
+      d.currentLapMs ??= 0;
+      d.trackProgress ??= 0;
+
       // Lap
       d.currentLapMs += 1000;
 
@@ -107,7 +110,7 @@ export function createRaceSimulator(
         max: 12500,
       });
 
-      d.ersPercent = evolve(d.ersPercent, 60, {
+      d.ersPercent = evolve(d.ersPercent ?? 0, 60, {
         pullStrength: 0.03,
         noiseAmount: 3,
         spikeChance: 0.06,
@@ -154,7 +157,7 @@ export function createRaceSimulator(
       });
 
       // Progress
-      d.currentSpeedKmh = evolve(d.currentSpeedKmh, 220, {
+      d.currentSpeedKmh = evolve(d.currentSpeedKmh ?? 0, 220, {
         pullStrength: 0.1,
         noiseAmount: 15,
         spikeChance: 0.1,

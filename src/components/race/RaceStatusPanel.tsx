@@ -34,7 +34,7 @@ export function RaceStatusPanel() {
                 <p className=" text-sm ">
                   <span className="lg:hidden mr-1">:</span>
                   <span className="text-text-primary">
-                    {formatMsAsLapTime(baseline.currentLapMs)}
+                    {formatMsAsLapTime(baseline.currentLapMs ?? 0)}
                   </span>
                 </p>
               </div>
@@ -60,7 +60,7 @@ export function RaceStatusPanel() {
 
         <div className="w-full lg:w-auto lg:pl-4 mt-4 lg:mt-0 flex flex-col gap-2 items-center">
           <div className="w-full max-w-fit">
-            <TrackMap progress={baseline.trackProgress} />
+            <TrackMap progress={baseline.trackProgress ?? 0} />
           </div>
           <div className="w-full max-w-55 flex items-center gap-1.5 text-xs text-text-secondary uppercase tracking-widest">
             <span>🇩🇪</span>

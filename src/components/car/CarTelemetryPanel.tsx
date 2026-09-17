@@ -56,7 +56,7 @@ export function CarTelemetryPanel() {
         <div>
           <div className="flex justify-between font-mono text-xs">
             <span className="text-text-secondary">ERS</span>
-            <span className="text-text-primary">{ersPercent.toFixed(0)}%</span>
+            <span className="text-text-primary">{ersPercent?.toFixed(0)}%</span>
           </div>
           <div className="mt-1 h-1.5 bg-border rounded-full overflow-hidden">
             <div className="h-full bg-stress-purple" style={{ width: "72%" }} />
