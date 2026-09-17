@@ -23,7 +23,11 @@ export function RaceStatusPanel() {
         lapTimeSeconds
       : 0;
   return (
-    <CollapsiblePanel title="01 / Race status" gridArea="race">
+    <CollapsiblePanel
+      title="01 / Race status"
+      gridArea="race"
+      defaultOpen={true}
+    >
       <div className="flex flex-col lg:divide-x divide-border lg:flex-row items-center lg:items-stretch">
         <div className="w-full lg:w-fit lg:pr-4 flex lg:flex-col justify-between items-center lg:items-start lg:justify-start">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between md:justify-start lg:gap-8">

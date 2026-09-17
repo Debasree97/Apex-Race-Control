@@ -8,14 +8,11 @@ import { Header } from "./Header";
 import { Rail } from "./Rail";
 export function Dashboard() {
   return (
-    <div className="h-screen flex flex-col bg-bg text-text-primary overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-bg text-text-primary">
       <Header />
-      <div className="flex flex-col md:flex-row flex-1 min-h-0">
+      <div className="flex flex-col md:flex-row flex-1">
         <Rail />
-        <main
-          id="dashboard-scroll-area"
-          className="dashboard-grid flex-1 min-w-0 min-h-0 p-4 overflow-y-auto"
-        >
+        <main className="dashboard-grid flex-1 min-w-0 p-4">
           <RaceStatusPanel />
           <CarTyresPanel />
           <EventsPanel />

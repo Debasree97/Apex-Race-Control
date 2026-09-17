@@ -35,20 +35,20 @@ export function Header() {
   }, []);
 
   return (
-    <header className="border-b border-border bg-surface px-4 py-3 md:px-6 md:py-3 flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-4">
-      <div className="flex items-center justify-between md:contents">
-        <div className="md:order-1">
-          <p className="font-semibold tracking-wide text-sm md:text-base">
+    <header className="border-b border-border bg-surface px-4 py-2 md:px-6 md:py-3 flex flex-nowrap items-center justify-between gap-3 overflow-x-auto">
+      <div className="flex items-center gap-2 shrink-0">
+        <div className="shrink-0">
+          <p className="font-semibold tracking-wide text-sm md:text-base whitespace-nowrap">
             APEX RACING
           </p>
-          <p className="hidden md:block text-xs text-text-secondary tracking-widest">
+          <p className="hidden sm:block text-[10px] text-text-secondary tracking-widest whitespace-nowrap">
             RACE CONTROL
           </p>
         </div>
 
-        <span className="flex items-center gap-1 text-success text-xs font-mono md:order-2 md:text-sm">
-          <CheckeredFlagIcon className="hidden md:inline w-3.5 h-3.5 text-text-secondary" />
-          <span className="hidden md:inline">
+        <span className="flex items-center gap-1 text-success text-xs font-mono shrink-0 whitespace-nowrap ml-2">
+          <CheckeredFlagIcon className="hidden sm:inline w-3.5 h-3.5 text-text-secondary" />
+          <span className="hidden sm:inline">
             RACE {baseline.lap}/{circuit.totalLaps}
           </span>
           <span className="w-2 h-2 rounded-full bg-success" />
@@ -56,7 +56,7 @@ export function Header() {
         </span>
       </div>
 
-      <div className="hidden md:flex items-center gap-3 text-xs font-mono text-text-secondary md:order-3">
+      <div className="hidden lg:flex items-center gap-3 text-xs font-mono text-text-secondary shrink-0 whitespace-nowrap">
         <span className="flex items-center gap-1">
           <TemperatureIcon className="w-3.5 h-3.5" />{" "}
           {weather.airTempC.toFixed(0)}°C
@@ -79,35 +79,22 @@ export function Header() {
         </span>
       </div>
 
-      <span className="hidden md:inline text-text-secondary text-sm font-mono md:order-4">
+      <span className="hidden lg:inline text-text-secondary text-sm font-mono shrink-0 whitespace-nowrap">
         {clock}
       </span>
 
-      <div className="flex items-center justify-between md:order-5 md:justify-end md:gap-3">
-        <div className="flex items-center gap-2">
-          <DriverSilhouetteIcon className="w-7 h-7 text-text-secondary bg-surface-elevated rounded-full p-1" />
-          <span className="text-xs md:text-sm font-mono text-text-primary">
-            {driver.shortName}
-          </span>
-        </div>
-        <span className="text-xs md:text-sm font-mono text-text-secondary">
-          P{baseline.position}&nbsp;&nbsp;{baseline.lap}/{circuit.totalLaps}
-        </span>
-      </div>
-      <div ref={dropdownRef} className="relative md:order-5">
+      <div ref={dropdownRef} className="relative shrink-0 ml-auto">
         <button
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-haspopup="listbox"
-          className="flex items-center justify-between w-full md:w-auto gap-3 px-2 py-1 rounded-md border border-transparent hover:border-border transition-colors outline-none focus-visible:border-telemetry-cyan"
+          className="flex items-center gap-2 px-2 py-1 rounded-md border border-transparent hover:border-border transition-colors outline-none focus-visible:border-telemetry-cyan whitespace-nowrap"
         >
-          <div className="flex items-center gap-2">
-            <DriverSilhouetteIcon className="w-7 h-7 text-text-secondary bg-surface-elevated rounded-full p-1" />
-            <span className="text-xs md:text-sm font-mono text-text-primary">
-              {driver.shortName}
-            </span>
-          </div>
-          <span className="text-xs md:text-sm font-mono text-text-secondary">
+          <DriverSilhouetteIcon className="w-6 h-6 md:w-7 md:h-7 text-text-secondary bg-surface-elevated rounded-full p-1 shrink-0" />
+          <span className="text-xs md:text-sm font-mono text-text-primary">
+            {driver.shortName}
+          </span>
+          <span className="text-xs md:text-sm font-mono text-text-secondary hidden sm:inline">
             P{baseline.position}&nbsp;&nbsp;{baseline.lap}/{circuit.totalLaps}
           </span>
           <svg
@@ -115,7 +102,7 @@ export function Header() {
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
-            className={`w-3 h-3 text-text-secondary transition-transform ${open ? "rotate-180" : ""}`}
+            className={`w-3 h-3 text-text-secondary transition-transform shrink-0 ${open ? "rotate-180" : ""}`}
           >
             <path d="M6 9l6 6 6-6" />
           </svg>

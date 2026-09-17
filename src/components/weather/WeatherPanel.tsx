@@ -16,54 +16,45 @@ export function WeatherPanel() {
     windSpeedKmh,
   } = simState.weather;
 
-  return (
-    <CollapsiblePanel title=" 05 / Weather" gridArea="weather">
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-5 font-mono text-xs text-text-secondary">
-        <div className="flex flex-col items-center">
-          <div className="flex flex-col items-center gap-1 mb-1">
-            <TemperatureIcon className="w-6 h-6 text-telemetry-cyan" />
-            <p>AIR TEMP</p>
-          </div>
-          <p className="text-text-primary text-sm">{airTempC.toFixed(1)}°C</p>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="flex flex-col items-center gap-1 mb-1">
-            <CloudIcon className="w-6 h-6 text-telemetry-cyan" />
-            <p>CLOUD COVER</p>
-          </div>
-          <p className="text-text-primary text-sm">
-            {" "}
-            {Math.round(cloudCoverPercent)}%
-          </p>
-        </div>
+  const items = [
+    {
+      Icon: TemperatureIcon,
+      label: "AIR TEMP",
+      value: `${airTempC.toFixed(1)}°C`,
+    },
+    {
+      Icon: CloudIcon,
+      label: "CLOUD",
+      value: `${Math.round(cloudCoverPercent)}%`,
+    },
+    {
+      Icon: HumidityIcon,
+      label: "HUMIDITY",
+      value: `${Math.round(humidityPercent)}%`,
+    },
+    {
+      Icon: PressureIcon,
+      label: "PRESSURE",
+      value: `${Math.round(pressureMb)} mb`,
+    },
+    { Icon: WindIcon, label: "WIND", value: `${windSpeedKmh.toFixed(1)} km/h` },
+  ];
 
-        <div className="flex flex-col items-center">
-          <div className="flex  flex-col items-center gap-1 mb-1">
-            <HumidityIcon className="w-6 h-6 text-telemetry-cyan" />
-            <p>HUMIDITY</p>
+  return (
+    <CollapsiblePanel title="05 / Weather" gridArea="weather">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3 font-mono text-xs text-text-secondary">
+        {items.map(({ Icon, label, value }) => (
+          <div
+            key={label}
+            className="flex flex-col items-center text-center gap-1 min-w-0"
+          >
+            <Icon className="w-3.5 h-3.5 text-telemetry-cyan shrink-0" />
+            <p className="whitespace-nowrap">{label}</p>
+            <p className="text-text-primary text-sm whitespace-nowrap">
+              {value}
+            </p>
           </div>
-          <p className="text-text-primary text-sm">
-            {Math.round(humidityPercent)}%
-          </p>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="flex flex-col items-center gap-1 mb-1">
-            <PressureIcon className="w-6 h-6 text-telemetry-cyan" />
-            <p>PRESSURE</p>
-          </div>
-          <p className="text-text-primary text-sm">
-            {Math.round(pressureMb)} mb
-          </p>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="flex  flex-col items-center gap-1 mb-1">
-            <WindIcon className="w-6 h-6 text-telemetry-cyan" />
-            <p>WIND</p>
-          </div>
-          <p className="text-text-primary text-sm">
-            {windSpeedKmh.toFixed(1)} km/h
-          </p>
-        </div>
+        ))}
       </div>
     </CollapsiblePanel>
   );

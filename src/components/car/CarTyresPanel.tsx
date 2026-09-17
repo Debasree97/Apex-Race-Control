@@ -26,7 +26,7 @@ export function CarTyresPanel() {
   return (
     <CollapsiblePanel title="02 / Car & tyres" gridArea="car">
       <div className="flex flex-col lg:flex-row  ">
-        <div className="tyre-grid border-b lg:border-b-0 lg:border-r border-border pb-4 md:pb-0 ">
+        <div className="tyre-grid border-b lg:border-b-0 lg:border-r border-border pb-4 md:pb-0 basis-2/3">
           {(["fl", "fr"] as const).map((corner) => {
             const status = getTyreStatus(tyres[corner].tempC);
             return (
@@ -94,37 +94,37 @@ export function CarTyresPanel() {
             );
           })}
         </div>
-        <div className="basis-1/4 p-6 ">
+        <div className="basis-1/3 p-6">
           {selected ? (
             (() => {
               const status = getTyreStatus(tyres[selected].tempC);
               return (
                 <div
-                  className={`flex flex-col justify-evenly z-20 w-full h-full border rounded-md p-2 font-mono text-sm shadow-lg pointer-events-none ${tyreStatusBorder[status]} ${tyreStatusBg[status]}`}
+                  className={`flex flex-col justify-evenly z-20 w-full h-full border rounded-md p-2 font-mono text-xs shadow-lg pointer-events-none ${tyreStatusBorder[status]} ${tyreStatusBg[status]}`}
                 >
                   <div className="flex  lg:flex-col items-center justify-between mb-1">
                     <span className="text-text-primary uppercase tracking-widest">
                       {tyreLabels[selected]} TYRE
                     </span>
-                    <span className={`${tyreStatusText[status]} lg:text-lg`}>
+                    <span className={`${tyreStatusText[status]}`}>
                       {tyreStatusLabel[status]}
                     </span>
                   </div>
                   <div className="flex lg:flex-col items-center justify-between">
                     <span className="text-text-secondary">TEMP</span>
-                    <span className={`${tyreStatusText[status]}  lg:text-lg`}>
+                    <span className={`${tyreStatusText[status]} `}>
                       {tyres[selected].tempC.toFixed(1)}°C{" "}
                     </span>
                   </div>
                   <div className="flex lg:flex-col items-center justify-between mt-1">
                     <span className="text-text-secondary">PRESS</span>
-                    <span className="text-text-primary  lg:text-lg">
+                    <span className="text-text-primary ">
                       {tyres[selected].pressureBar.toFixed(2)} bar
                     </span>
                   </div>
                   <div className="flex lg:flex-col items-center justify-between mt-1">
                     <span className="text-text-secondary">BRAKE</span>
-                    <span className="text-text-primary  lg:text-lg">
+                    <span className="text-text-primary ">
                       {brakes[selected].tempC.toFixed(0)}°C
                     </span>
                   </div>
@@ -132,8 +132,8 @@ export function CarTyresPanel() {
               );
             })()
           ) : (
-            <div className="border border-border rounded-lg h-27.5 lg:h-full w-full flex items-center justify-center text-text-secondary">
-              <span className="text-center p-2"> Display Tyres Telemetry</span>
+            <div className="border border-border rounded-lg h-27.5 lg:h-full w-full flex items-center justify-center text-text-secondary ">
+              <span className="text-center p-2 text-xs">Updating...</span>
             </div>
           )}
         </div>

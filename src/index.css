@@ -53,6 +53,21 @@ body {
 .event-scroll::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-telemetry-cyan);
 }
+.panel-primary {
+  border-color: rgba(0, 210, 190, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(0, 210, 190, 0.08),
+    0 4px 24px -8px rgba(0, 210, 190, 0.15);
+}
+
+.panel-secondary {
+  border-color: rgba(
+    22,
+    52,
+    59,
+    0.4
+  ); /* dimmer than your default --color-border */
+}
 
 .tyre-grid {
   display: grid;
@@ -83,6 +98,15 @@ body {
 
 @media (min-width: 768px) {
   .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "race tyres"
+      "driver cartel"
+      "weather events";
+  }
+}
+@media (min-width: 1024px) {
+  .dashboard-grid {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-areas:
       "race tyres driver"
@@ -92,7 +116,7 @@ body {
 
 @media (min-width: 1280px) {
   .dashboard-grid {
-    height: 100%;
+    min-height: calc(100vh - 5rem);
     grid-template-rows: 1fr 1fr;
   }
 }

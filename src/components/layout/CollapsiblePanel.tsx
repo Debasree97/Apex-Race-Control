@@ -14,20 +14,25 @@ export function CollapsiblePanel({
   title,
   children,
   gridArea,
-  defaultOpen = true,
+  defaultOpen = false,
 }: CollapsiblePanelProps) {
   const [open, setOpen] = useState(defaultOpen);
-
+  const variantClass = open
+    ? "panel-primary border-transparent"
+    : "border-border";
   return (
     <section
-      className={`bg-surface border border-border rounded-lg p-4 xl:p-3 md:h-full md:min-h-0 flex flex-col ${gridAreaClass[gridArea]}`}
+      className={`bg-surface border rounded-xl p-4 xl:p-3 flex flex-col ${variantClass} ${gridAreaClass[gridArea]}`}
     >
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex items-center justify-between w-full text-left md:pointer-events-none md:cursor-default"
         aria-expanded={open}
       >
-        <h2 className="text-xs text-text-secondary uppercase tracking-widest">
+        <h2 className="flex items-center gap-2 text-xs text-text-secondary uppercase tracking-widest">
+          <span
+            className={`w-1 h-3 rounded-full ${open ? "bg-accent" : "bg-border"}`}
+          />
           {title}
         </h2>
         <svg
@@ -42,7 +47,7 @@ export function CollapsiblePanel({
       </button>
 
       <div
-        className={`${open ? "flex flex-col flex-1 min-h-0 mt-3" : "hidden"} md:flex md:flex-col md:flex-1 md:min-h-0 md:mt-3`}
+        className={`${open ? "flex flex-col mt-3" : "hidden"} md:flex md:flex-col md:mt-3`}
       >
         {children}
       </div>
