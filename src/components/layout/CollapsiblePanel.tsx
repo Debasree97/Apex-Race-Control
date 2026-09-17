@@ -30,14 +30,14 @@ export function CollapsiblePanel({
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
-          className={`w-4 h-4 text-text-secondary transition-transform md:hidden ${open ? "rotate-180" : ""}`}
+          className={`w-4 h-4 text-text-secondary transition-transform sm:hidden ${open ? "rotate-180" : ""}`}
         >
           <path d="M6 9l6 6 6-6" />
         </svg>
       </button>
 
       <div
-        className={`${open ? "flex flex-col mt-3" : "hidden"} md:flex md:flex-col md:mt-3`}
+        className={`${open ? "flex flex-col mt-3" : "hidden"} sm:flex sm:flex-col sm:mt-3`}
       >
         {children}
       </div>
