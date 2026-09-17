@@ -5,7 +5,7 @@ A live race-control dashboard for a fictional Formula 1 team, built for the Fron
 ## 1. How to run
 
 ```powershell
-git clone <your-repo-url>
+git clone <repo-url>
 cd apex-race-control
 npm install
 npm run dev
