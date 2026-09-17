@@ -1,73 +1,96 @@
-# React + TypeScript + Vite
+# Apex Racing — F1 Race Control
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A live race-control dashboard for a fictional Formula 1 team, built for the Frontend Engineer take-home assignment.
 
-Currently, two official plugins are available:
+## 1. How to run
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```powershell
+git clone <your-repo-url>
+cd apex-race-control
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Runs at `http://localhost:5173`. Built and tested with Node 20.x. No environment variables or backend required — all data is simulated client-side.
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+## 2. Overview
 
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+Apex Racing Race Control is a mission-control-style dashboard for a race engineer monitoring one driver's car, tyres, physiology, and the surrounding race context in real time. The core UX idea is a dense, glanceable instrument panel — not a generic admin dashboard — where color communicates state (a tyre in the warning/critical range is immediately visible, not something you have to read a number to notice), the interactive car lets an engineer drill into any tyre's live telemetry without losing sight of the rest of the dashboard, and every value is driven by a single client-side simulator so the whole UI updates coherently, tick by tick.
+
+## 3. Architecture
+
 ```
+src/
+  simulator/
+    engine.ts        # tick loop evolves all driver + weather state
+    eventRules.ts     # detects state transitions (e.g. tyre entering "warning") and emits events
+  context/
+    raceContextInstance.ts   # React context object + its TypeScript type
+    RaceContext.tsx           # RaceProvider — owns the simulator instance, tick subscription, events
+    useRace.ts                 # consuming hook
+  types/race.ts        # Driver, DriverTelemetry, Weather, RaceEvent, RaceSeed types
+  utils/
+    tyreStatus.ts       # temperature → cold/optimal/warning/critical mapping + Tailwind color classes
+    format.ts             # lap-time string ↔ milliseconds helpers
+  hooks/
+    useRollingHistory.ts  # generic rolling-window hook, used for tyre trend + sparkline data
+    useClock.ts             # live wall-clock ticker for the header
+  components/
+    layout/    Header, Rail (decorative brand rail), Dashboard, CollapsiblePanel (shared accordion/panel shell)
+    race/      RaceStatusPanel, TrackMap (SVG path animation)
+    car/       CarTyresPanel (interactive hit regions + persistent tooltip), CarTelemetryPanel
+    driver/    DriverTelemetryPanel, CircularGauge, Sparkline
+    events/    EventsPanel
+    weather/   WeatherPanel
+    icons/     hand-built SVG icon set (from the provided asset pack) + DriverNumberBadge
+```
+
+**State approach:** one `RaceProvider` (React Context + `useState`, not a library) holds the seed data, the live simulator's `simState` snapshot, the selected driver ID, and the accumulated events array. The simulator itself (`createRaceSimulator`) is a plain closure-based module with no React dependency — it exposes `subscribe`/`start`/`stop`/`getState`, and `RaceProvider` is the only thing that bridges it into React via `useState` + `useEffect`.
+
+## 4. Live data simulation
+
+- **Tick rate:** 1000ms (`setInterval`).
+- **Model:** every metric uses the same `evolve()` primitive — a target-seeking drift term (`pullStrength`), small per-tick noise, and a low-probability spike that decays back toward the target over subsequent ticks. Parameters differ per metric to give each one its own character: heart rate/stress wander with occasional spikes; RPM has much larger noise amplitude to reflect gear-change swings; engine temperature and weather drift extremely slowly (small `pullStrength`/`noiseAmount`) to feel thermally/meteorologically realistic; fuel is a flat per-tick decrement with no noise, since fuel genuinely only depletes; ERS uses a negative-spike model (sudden deployment drains, gradual recovery) rather than the positive-spike pattern everything else uses.
+- **Tyres specifically:** each of the four corners calls `evolve()` independently with slightly different baselines (fronts run hotter than rears) — the four corners are guaranteed to diverge over time because each draws its own independent random noise/spike per tick, not because of any explicit "make them different" rule.
+- **Track/lap progress:** a `trackProgress` value (0–1000, matching the provided SVG's `pathLength="1000"`) advances each tick scaled by the driver's current speed; wrapping past 1000 increments the lap counter and resets the current-lap timer. Top speed is tracked as a running maximum, separate from the wandering instantaneous speed.
+- **Events:** generated by diffing each tick's state against the _previous_ tick's state (`detectDriverEvents`), firing only on genuine transitions — e.g. a tyre crossing from "optimal" into "warning" fires once, not every tick it remains warm. Rules cover tyre-status transitions, lap completion, engine-temperature threshold crossing, and low-fuel threshold crossing. Severity (`info`/`tyre`/`weather`/`caution`/`critical`) drives color coding in the feed.
+- **Driver switching:** does **not** reset simulation state. All three drivers' telemetry evolves in parallel every tick regardless of which one is currently displayed; switching the active driver just changes which slice of already-live state the dashboard reads from. This was a deliberate choice — it reads as "three cars are racing simultaneously, you're choosing who to watch," which is more realistic than a fresh restart per selection.
+
+## 5. Responsive strategy
+
+Built mobile-first throughout, with real hierarchy changes rather than a scaled-down desktop layout:
+
+- **Mobile (~390px):** single stacked column; each panel is a collapsible accordion section (tap the header to expand/collapse) so the engineer can control information density instead of scrolling past everything; the header collapses to two compact rows (brand+live indicator, driver+position); the tyre hit-region car interaction keeps its persistent-focus tooltip anchored to the tapped tyre so information stays visible without navigating away.
+- **Tablet (~640–1023px):** a two-column layout pairs Race Status with Car & Tyres, and Car Telemetry/Driver State/Weather/Events fill in below — panels are always expanded (no accordion) since there's enough room.
+- **Desktop (≥1024px):** a three-column CSS Grid with an explicit 1 : 1.5 : 1 width ratio — a wider center column for Race Status + Car & Tyres (the two panels an engineer looks at most), a narrower column for Driver/Car/Weather telemetry, and a dedicated Events column that stretches and scrolls internally to match the taller columns' height rather than growing the whole layout.
+- Breakpoint-specific grid placement is handled by stacking Tailwind's `md:`/`lg:` position utilities on the same elements (both defined, the more specific one wins per CSS cascade order) rather than duplicating markup per breakpoint.
+
+## 6. Challenges & pitfalls
+
+1. **React 19's stricter ref-during-render rule.** Storing the simulator instance and tick-derived comparison state in `useRef` and reading it during JSX render triggered "Cannot access refs during render" errors repeatedly (context provider, tyre trend arrows). Fixed by using lazy `useState` initializers for anything read during render, and reserving `useRef`/plain closure variables strictly for values only touched inside effects/event handlers.
+2. **Mutated-in-place simulator state silently broke event detection.** The simulator mutates its internal driver objects directly each tick; `{ ...state }` only shallow-copies the top level, so a "previous tick" snapshot ended up being the same underlying objects as the "current tick" — event diffing always compared a value against itself. Fixed with `structuredClone()` for a genuine deep copy each tick.
+3. **Tailwind can't see dynamically interpolated class names.** Template-literal class construction (e.g. `` `[grid-area:${corner}]` ``) silently produces no CSS, since Tailwind's compiler only generates classes it finds as complete literal strings in source. Fixed by using static lookup objects mapping each dynamic key to its full literal class string.
+4. **Row-height coupling fought a masonry-style column layout.** Three unevenly-sized columns (2 tall panels, 3 short panels, 1 scrollable panel) needed to end up visually equal height. Tried independent Flexbox columns first, which let each column size purely to its own content — but that meant panels in different columns no longer aligned where alignment actually mattered. Settled on CSS Grid with explicit `col-start`/`row-start`/`row-span` line placement (no named template areas) plus `h-full`/`flex-1` stated at every nesting level, so a stretched cell's height reliably reaches whatever actually needs to fill it.
+5. **`object-contain` letterboxing broke absolutely-positioned tyre hit regions.** Percentage-based button positions were measured against the image's _container_ box, not its actual rendered content — since the container's aspect ratio didn't match the image's, letterboxing shifted the tyres' real on-screen position at different widths. Fixed by locking the container to the image's exact intrinsic aspect ratio (`800 / 1836`) so `object-contain` never letterboxes and percentage positions stay accurate at any size.
+6. **`overflow-x-auto` silently broke the driver dropdown.** Adding a horizontal-scroll safety net to the header (`overflow-x-auto`) had an unexpected side effect: setting `overflow-x` to anything other than `visible` forces the browser to also treat `overflow-y` as `auto`, even though it was never set explicitly. Since the driver-switcher dropdown is absolutely positioned to extend below the header's own height, it was being silently clipped by that forced vertical overflow. Fixed by removing the safety net entirely — it turned out to be unnecessary once every header text element already had `whitespace-nowrap` and `shrink-0` applied, which was the more correct fix for preventing overflow in the first place.
+
+## 7. Trade-offs
+
+The biggest deliberate cut: **rival car markers on the track map are cosmetic**, not driven by real simulated rival telemetry — they advance along the same SVG path at independently-tuned, roughly race-paced speeds, giving the track view a populated, alive feel without the cost of fully simulating three complete competing race states just for decorative background motion. Given the assignment's explicit time-boxing guidance, this felt like the right place to simplify: the _required_ driver (the one currently selected) has fully real, simulator-driven telemetry everywhere; only the _decorative_ background cars are approximated.
+
+## 8. Performance notes
+
+- **State boundaries:** the simulator's tick loop lives entirely outside React (a plain closure module); React only re-renders when `RaceProvider`'s `setSimState` fires once per tick, and each panel subscribes only to the slice of `simState` it actually needs via `useRace()`.
+- **Rolling-history/derived-value patterns** (tyre trend arrows, sparkline data) deliberately use `useMemo` for values computed from other state, rather than a second `useState`+`useEffect` pair — avoiding an extra render cycle per tick that a naive effect-chain would introduce.
+- **Known, accepted cost:** `structuredClone()` runs once per tick against the full simulator state to support event-transition detection. This is a real, non-trivial cost at scale, but acceptable at this app's size and 1-second tick rate; a future optimization would be cloning only the specific fields event rules actually check, rather than the whole state tree.
+- Chart rendering (sparklines, circular gauges) is plain SVG with no external charting library, keeping re-render cost low and avoiding a dependency whose internal update behavior would be opaque to reason about or explain.
+
+## 9. Tools used
+
+- **Bundler/tooling:** Vite (`react-ts` template)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS v4 (via `@tailwindcss/vite`, no config file — theme tokens defined directly in `index.css` via `@theme`)
+- **Charts:** hand-rolled SVG (polyline sparklines with a filled-area shadow, circular `stroke-dasharray` gauges) — no charting library
+- **State management:** React Context + `useState`/`useMemo` (no external state library)
+- **Icons:** the provided asset pack's SVGs, inlined as React components
+- **AI tools:** used for research, debugging guidance, and architectural discussion throughout development (React patterns, CSS Grid behavior, simulator design) — all implementation was written and understood directly, not pasted in as a finished solution.

@@ -8,7 +8,7 @@ export function CarTelemetryPanel() {
   const rpmPercent = Math.min((rpm / 12000) * 100, 100);
 
   return (
-    <CollapsiblePanel title="04 / Car telemetry" gridArea="cartel">
+    <CollapsiblePanel title="04 / Car telemetry">
       <div className="flex flex-col gap-3">
         <div>
           <div className="flex justify-between font-mono text-xs">

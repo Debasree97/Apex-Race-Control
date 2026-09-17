@@ -61,12 +61,7 @@ body {
 }
 
 .panel-secondary {
-  border-color: rgba(
-    22,
-    52,
-    59,
-    0.4
-  ); /* dimmer than your default --color-border */
+  border-color: rgba(22, 52, 59, 0.4);
 }
 
 .tyre-grid {
@@ -84,7 +79,7 @@ body {
   } */
 
 .dashboard-grid {
-  display: grid;
+  /* display: grid;
   gap: 0.75rem;
   grid-template-columns: 1fr;
   grid-template-areas:
@@ -93,30 +88,47 @@ body {
     "driver"
     "cartel"
     "weather"
-    "events";
+    "events"; */
 }
 
 @media (min-width: 768px) {
-  .dashboard-grid {
+  /* .dashboard-grid {
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
-      "race tyres"
-      "driver cartel"
-      "weather events";
-  }
+      "driver race"
+      "cartel race"
+      "weather tyres"
+      "events tyres";
+  } */
 }
+
 @media (min-width: 1024px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr 1fr 1fr;
+  /* .dashboard-grid {
+    min-height: calc(100vh - 5rem);
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(0, 1fr));
+
+    gap: 0.75rem;
+
     grid-template-areas:
-      "race tyres driver"
-      "cartel weather events";
+      "driver race events"
+      "driver race events"
+      "cartel race events"
+      "cartel tyres events"
+      "weather tyres events"
+      "weather tyres events";
+  } */
+
+  .dashboard-grid > * {
+    min-height: 0;
+    height: 100%;
   }
 }
 
 @media (min-width: 1280px) {
   .dashboard-grid {
     min-height: calc(100vh - 5rem);
-    grid-template-rows: 1fr 1fr;
   }
 }

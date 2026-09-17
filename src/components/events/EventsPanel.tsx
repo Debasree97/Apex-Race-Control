@@ -13,11 +13,12 @@ export function EventsPanel() {
   const { events } = useRace();
 
   return (
-    <CollapsiblePanel title="06 / Live events" gridArea="events">
-      <div className="event-scroll flex flex-col gap-2 font-mono text-xs overflow-y-auto min-h-0 flex-1">
+    <CollapsiblePanel title="06 / Live events">
+      <div className="event-scroll flex-1 min-h-0 overflow-y-auto flex flex-col gap-2 font-mono text-xs max-h-60 lg:max-h-200">
         {events.length === 0 && (
           <p className="text-text-secondary">Monitoring for events…</p>
         )}
+
         {events.map((event) => (
           <div
             key={event.id}
@@ -27,8 +28,10 @@ export function EventsPanel() {
               <span className={severityColor[event.severity]}>
                 {event.severity.toUpperCase()}
               </span>
+
               <span>{event.timestamp}</span>
             </div>
+
             <p className="text-text-primary mt-0.5">{event.message}</p>
           </div>
         ))}

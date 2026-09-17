@@ -1,19 +1,9 @@
 import { useState } from "react";
 import type { CollapsiblePanelProps } from "../../types";
 
-const gridAreaClass: Record<string, string> = {
-  race: "[grid-area:race]",
-  tyres: "[grid-area:tyres]",
-  driver: "[grid-area:driver]",
-  cartel: "[grid-area:cartel]",
-  weather: "[grid-area:weather]",
-  events: "[grid-area:events]",
-};
-
 export function CollapsiblePanel({
   title,
   children,
-  gridArea,
   defaultOpen = false,
 }: CollapsiblePanelProps) {
   const [open, setOpen] = useState(defaultOpen);
@@ -22,7 +12,7 @@ export function CollapsiblePanel({
     : "border-border";
   return (
     <section
-      className={`bg-surface border rounded-xl p-4 xl:p-3 flex flex-col ${variantClass} ${gridAreaClass[gridArea]}`}
+      className={`bg-surface border rounded-xl p-4 xl:p-3 flex flex-col h-full min-h-0  ${variantClass}`}
     >
       <button
         onClick={() => setOpen((o) => !o)}

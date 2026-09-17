@@ -14,7 +14,7 @@ export function DriverTelemetryPanel() {
   const stressHistory = useRollingHistory(stress);
 
   return (
-    <CollapsiblePanel title="03 / Driver state" gridArea="driver">
+    <CollapsiblePanel title="03 / Driver state">
       <div className="flex flex-col gap-3 flex-1 justify-around">
         <div className="flex items-center gap-3">
           <div className="relative shrink-0">

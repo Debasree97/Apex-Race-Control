@@ -4,7 +4,7 @@ export function Rail() {
   return (
     <aside className="relative flex overflow-hidden border-b border-border bg-surface md:w-16 md:flex-col md:border-b-0 md:border-r">
       {/* Accent line */}
-      <div className="absolute inset-y-0 left-0 z-30 hidden w-0.5  md:block" />
+      <div className="absolute inset-y-0 left-0 z-30 hidden w-0.5  lg:block" />
 
       {/* Diagonal logo */}
       <img

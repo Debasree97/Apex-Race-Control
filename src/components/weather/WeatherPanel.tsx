@@ -41,15 +41,15 @@ export function WeatherPanel() {
   ];
 
   return (
-    <CollapsiblePanel title="05 / Weather" gridArea="weather">
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3 font-mono text-xs text-text-secondary">
+    <CollapsiblePanel title="05 / Weather">
+      <div className="grid grid-cols-5 sm:grid-cols-3 xl:grid-cols-5 gap-3 font-mono text-xs text-text-secondary">
         {items.map(({ Icon, label, value }) => (
           <div
             key={label}
             className="flex flex-col items-center text-center gap-1 min-w-0"
           >
-            <Icon className="w-3.5 h-3.5 text-telemetry-cyan shrink-0" />
-            <p className="whitespace-nowrap">{label}</p>
+            <Icon className="w-4 h-4 text-telemetry-cyan shrink-0" />
+            <p className="hidden sm:inline whitespace-nowrap">{label}</p>
             <p className="text-text-primary text-sm whitespace-nowrap">
               {value}
             </p>

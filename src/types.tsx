@@ -135,13 +135,13 @@ export interface IconProps {
 }
 export interface DriverNumberBadgeProps {
   number: number;
-  className?: string;
+  isActive: boolean;
 }
 
 //
 export interface CollapsiblePanelProps {
   title: string;
   children: ReactNode;
-  gridArea: string;
   defaultOpen?: boolean;
+  className?: string;
 }

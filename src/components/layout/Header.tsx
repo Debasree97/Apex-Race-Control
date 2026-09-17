@@ -2,24 +2,25 @@ import { useEffect, useRef, useState } from "react";
 import { useRace } from "../../context/RaceContext";
 import { useClock } from "../../hooks/useClock";
 import { CheckeredFlagIcon } from "../../icons/CheckeredFlagIcon";
-import { CloudIcon } from "../../icons/CloudIcon";
-import { DriverSilhouetteIcon } from "../../icons/DriverSilhoutteIcon";
-import { HumidityIcon } from "../../icons/HumidityIcon";
-import { PressureIcon } from "../../icons/PressureIcon";
-import { TemperatureIcon } from "../../icons/TempatureIcon";
-import { WindIcon } from "../../icons/WIndIcon";
 import { DriverNumberBadge } from "../../icons/DriverNumberBadge";
+import { DriverSilhouetteIcon } from "../../icons/DriverSilhoutteIcon";
 
 export function Header() {
   const { seed, simState, activeDriverId, setActiveDriverId } = useRace();
   const driver = seed.drivers.find((d) => d.id === activeDriverId)!;
   const baseline = simState.drivers[activeDriverId];
   const circuit = seed.circuit;
-  const weather = simState.weather;
   const clock = useClock();
 
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const leaderEntry = Object.entries(simState.drivers).find(
+    ([, d]) => d.position === 1,
+  );
+  const leaderDriver = leaderEntry
+    ? seed.drivers.find((d) => d.id === leaderEntry[0])
+    : undefined;
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -35,7 +36,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="border-b border-border bg-surface px-4 py-2 md:px-6 md:py-3 flex flex-nowrap items-center justify-between gap-3 overflow-x-auto">
+    <header className="sticky top-0 z-40 border-b border-border bg-surface px-4 py-2 md:px-6 md:py-3 flex flex-nowrap items-center justify-between gap-4">
       <div className="flex items-center gap-2 shrink-0">
         <div className="shrink-0">
           <p className="font-semibold tracking-wide text-sm md:text-base whitespace-nowrap">
@@ -45,52 +46,34 @@ export function Header() {
             RACE CONTROL
           </p>
         </div>
-
-        <span className="flex items-center gap-1 text-success text-xs font-mono shrink-0 whitespace-nowrap ml-2">
-          <CheckeredFlagIcon className="hidden sm:inline w-3.5 h-3.5 text-text-secondary" />
-          <span className="hidden sm:inline">
-            RACE {baseline.lap}/{circuit.totalLaps}
-          </span>
-          <span className="w-2 h-2 rounded-full bg-success" />
-          LIVE
-        </span>
       </div>
-
-      <div className="hidden lg:flex items-center gap-3 text-xs font-mono text-text-secondary shrink-0 whitespace-nowrap">
-        <span className="flex items-center gap-1">
-          <TemperatureIcon className="w-3.5 h-3.5" />{" "}
-          {weather.airTempC.toFixed(0)}°C
+      <span className="flex items-center gap-1 text-success text-xs font-mono shrink-0 whitespace-nowrap ml-2">
+        <CheckeredFlagIcon className="hidden sm:inline w-3.5 h-3.5 text-text-secondary" />
+        <span className="hidden sm:inline">
+          RACE {baseline.lap}/{circuit.totalLaps}
         </span>
-        <span className="flex items-center gap-1">
-          <CloudIcon className="w-3.5 h-3.5" />{" "}
-          {Math.round(weather.cloudCoverPercent)}%
+        <span className="w-2 h-2 rounded-full bg-success" />
+        LIVE
+      </span>
+      <span className="flex items-center gap-1 text-xs font-mono shrink-0 whitespace-nowrap">
+        <span className="text-accent uppercase">Lead</span>
+        <span className="text-text-primary">
+          {leaderDriver?.shortName ?? "—"}
         </span>
-        <span className="flex items-center gap-1">
-          <HumidityIcon className="w-3.5 h-3.5" />{" "}
-          {Math.round(weather.humidityPercent)}%
-        </span>
-        <span className="flex items-center gap-1">
-          <PressureIcon className="w-3.5 h-3.5" />{" "}
-          {Math.round(weather.pressureMb)}mb
-        </span>
-        <span className="flex items-center gap-1">
-          <WindIcon className="w-3.5 h-3.5" /> {weather.windSpeedKmh.toFixed(0)}
-          km/h
-        </span>
-      </div>
+      </span>
 
       <span className="hidden lg:inline text-text-secondary text-sm font-mono shrink-0 whitespace-nowrap">
         {clock}
       </span>
 
-      <div ref={dropdownRef} className="relative shrink-0 ml-auto">
+      <div ref={dropdownRef} className="relative shrink-0 ">
         <button
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-haspopup="listbox"
           className="flex items-center gap-2 px-2 py-1 rounded-md border border-transparent hover:border-border transition-colors outline-none focus-visible:border-telemetry-cyan whitespace-nowrap"
         >
-          <DriverSilhouetteIcon className="w-6 h-6 md:w-7 md:h-7 text-text-secondary bg-surface-elevated rounded-full p-1 shrink-0" />
+          <DriverSilhouetteIcon className="hidden lg:inline w-6 h-6 md:w-7 md:h-7 text-text-secondary bg-surface-elevated rounded-full p-1 shrink-0" />
           <span className="text-xs md:text-sm font-mono text-text-primary">
             {driver.shortName}
           </span>
@@ -111,7 +94,7 @@ export function Header() {
         {open && (
           <div
             role="listbox"
-            className="absolute right-0 top-full mt-1 w-56 bg-surface-elevated border border-border rounded-md shadow-lg z-30 overflow-hidden"
+            className="absolute right-0 top-full mt-1 w-[calc(100vw-2rem)] max-w-56 bg-surface-elevated border border-border rounded-md shadow-lg z-30 overflow-hidden"
           >
             {seed.drivers.map((d) => {
               const live = simState.drivers[d.id];
@@ -131,10 +114,7 @@ export function Header() {
                       : "text-text-secondary hover:bg-border/40 hover:text-text-primary"
                   }`}
                 >
-                  <DriverNumberBadge
-                    number={d.number}
-                    className="w-6 h-6 text-xs shrink-0"
-                  />
+                  <DriverNumberBadge number={d.number} isActive={isActive} />
                   <span>{d.shortName}</span>
                   <span className="ml-auto">P{live.position}</span>
                 </button>
